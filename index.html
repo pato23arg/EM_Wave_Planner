@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>EM wave planner</title>
+  <meta name="description" content="">
+  <meta name="author" content="Patricio Villar">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="libraries/frameworks/revealjs/css/reveal.min.css">
+  <link rel="stylesheet" href="libraries/frameworks/revealjs/css/theme/sky.css" id="theme">
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" id="theme">
+  <!--[if lt IE 9]>
+  <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->  <link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class='' data-state='' id='slide-1'>
+  
+  <style>
+.reveal h1 {
+    font-size: 2em;
+    text-align: left;
+    padding-bottom: 18px;
+
+}
+
+.reveal h2 {
+    font-size: 1.5em;
+    text-align: left;
+    padding-bottom: 14px;
+
+}
+
+.reveal h3 {
+    font-size: 0.75em;
+    text-align: left;
+    padding-bottom: 8px
+}
+</style>
+
+<hr>
+
+<h1>EM wave simulator</h1>
+
+<h2>Introduction and Use cases</h2>
+
+<h3>Patricio Villar</h3>
+
+</section>
+<section class='' data-state='' id='slide-2'>
+  <h2>Motivation</h2>
+  <hr>
+
+<ul class = "build incremental">
+<li>Site surveys require planning and resource allocation ahead of time, even for the simplest propagation footprint.</li>
+<li>Avoiding a site survey might end up in coverage holes (bad source distribution) or hidden interference sources (rogue EM sources), which lead to bad user experience.</li>
+<li>Site surveys determine required hardware at the design stage, so it&#39;s a mandatory task before procurement.</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-3'>
+  <h2>How do we simulate a EM standing wave field?</h2>
+  <hr>
+
+<h3>Take Maxwell&#39;s equations in the presence of nonmagnetic matter, and the constitutive relations as follows:</h3>
+
+<p>\begin{eqnarray}
+\nabla \cdot \mathbf{D} &amp;=&amp; 0 \\
+\nabla \cdot \mathbf{B} &amp;=&amp; 0 \\
+\nabla \times \mathbf{E} &amp;=&amp; -\frac{\partial\mathbf{B}}{\partial t} \label{eqn:faraday} \\
+\nabla \times \mathbf{H} &amp;=&amp; \mathbf{J} + \frac{\partial\mathbf{D}}{\partial t} \\
+\mathbf{D} &amp;=&amp; \epsilon_0\epsilon_r\mathbf{D} \\
+\mathbf{H} &amp;=&amp; \frac{1}{\mu_0}\mathbf{B}
+\end{eqnarray}</p>
+
+</section>
+<section class='' data-state='' id='slide-4'>
+  <h2>How do we simulate a EM standing wave field? Cont&#39;ed</h2>
+  <hr>
+
+<h3>Substituting everything in for Eq.:</h3>
+
+<p>\(\nabla \times \mathbf{E} &=& -\frac{\partial\mathbf{B}}{\partial t} \label{eqn:faraday}\)</p>
+
+<h3>and assuming that:</h3>
+
+<p>\(\partial/\partial t \rightarrow i\omega\)</p>
+
+</section>
+<section class='' data-state='' id='slide-5'>
+  <h2>How do we simulate a EM standing wave field? Cont&#39;ed</h2>
+  <hr>
+
+<h3>We get the following:</h3>
+
+<p>\[
+\begin{equation}
+\left(\nabla^2 + n^2k0^2\right)\mathbf{E} + \nabla\left(\frac{1}{n^2}\left(\mathbf{E}\cdot\nabla n^2 \right) \right) = \mu_0i\omega_0\mathbf{J}
+\end{equation}
+\]</p>
+
+<p>where \(n(x,y) = \sqrt{\epsilon_r}\) is the refractive index and \((\omega_0, k_0)\) are the frequency and vacuum wavevector of the radiation, related by \(\omega_0 = ck_0\). In the presence of matter, the radiation field keeps the same frequency but the wavevector changes to \(k(x,y) = nk_0\), causing refraction, reflection etc.</p>
+
+</section>
+<section class='' data-state='' id='slide-6'>
+  <h2>Application details</h2>
+  <hr>
+
+<ul class = "build incremental">
+<li>A floor map is required to start the simulation.</li>
+<li>The floor map should be color-coded, in order to differentiate materials (and therefore their respective refractive index) - air, concrete, wooden walls are valid examples.</li>
+<li>Algorithm complexity is m x n, so ~ to wave resolution.</li>
+</ul>
+
+<p><img src="plan.png" alt="width"></p>
+
+</section>
+<section class='' data-state='' id='slide-7'>
+  <h2>Application output: Qualitative</h2>
+  <hr>
+
+<ul class = "build incremental">
+<li>This plot can be used as a rough aproximation for AP placement:</li>
+</ul>
+
+<p><img src="qlt_plot.png" alt="width"></p>
+
+</section>
+<section class='' data-state='' id='slide-8'>
+  <h2>Application output: Quantitative</h2>
+  <hr>
+
+<ul class = "build incremental">
+<li>This contour plot can be used to quantify coverage holes size and impact.</li>
+</ul>
+
+<p><img src="qtt_plot.png" alt="width"></p>
+
+</section>
+<section class='' data-state='' id='slide-9'>
+  <h2>Future Enhancements:</h2>
+  <hr>
+
+<ul class = "build incremental">
+<li>Multiple AP capability. (algorithm complexity increases to N x m x n)</li>
+<li>Multi-Threading and Grid support.</li>
+<li>Support for directional and quad antenas.</li>
+<li>GUI interface with Tk.</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-10'>
+  <h2>Biblio:</h2>
+  <ul class = "build incremental">
+<li>Computational Electromagnetics - Rylender, Bondenson, Ingelstrom.</li>
+<li>Computational Electrodynamics: The FDTD method - A. Taflove</li>
+<li>Computational Electromagnetics for RF and Microwave Engineering - D. Davidson.</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-11'>
+  <h2>QA</h2>
+  <hr>
+
+</section>
+    </div>
+  </div>
+</body>
+  <script src="libraries/frameworks/revealjs/lib/js/head.min.js"></script>
+  <script src="libraries/frameworks/revealjs/js/reveal.min.js"></script>
+  <script>
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    theme: Reveal.getQueryHash().theme || 'sky', 
+    transition: Reveal.getQueryHash().transition || 'fade', 
+    dependencies: [
+    // Cross-browser shim that fully implements classList -
+    // https://github.com/eligrey/classList.js/
+      { src: 'libraries/frameworks/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList;}},
+      // Zoom in and out with Alt+click
+      { src: 'libraries/frameworks/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Speaker notes
+      { src: 'libraries/frameworks/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Remote control your reveal.js presentation using a touch device
+      //{ src: 'libraries/frameworks/revealjs/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]
+  });
+  </script>  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+ 
+
+</html>

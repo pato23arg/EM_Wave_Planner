@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Traffic Matrix Modelling</title>
+  <meta name="description" content="">
+  <meta name="author" content="Patricio Villar">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="libraries/frameworks/revealjs/css/reveal.min.css">
+  <link rel="stylesheet" href="libraries/frameworks/revealjs/css/theme/sky.css" id="theme">
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" id="theme">
+  <!--[if lt IE 9]>
+  <script src="lib/js/html5shiv.js"></script>
+  <![endif]-->  <link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section class='' data-state='' id='slide-1'>
+  
+  <style>
+.reveal h1 {
+    font-size: 2em;
+    text-align: left;
+    padding-bottom: 18px;
+
+}
+
+.reveal h2 {
+    font-size: 1.5em;
+    text-align: left;
+    padding-bottom: 14px;
+
+}
+
+.reveal h3 {
+    font-size: 0.75em;
+    text-align: left;
+    padding-bottom: 8px
+}
+</style>
+
+<hr>
+
+<h1>Traffic Matrix Estimation</h1>
+
+<h2>TM applied to a managed DC</h2>
+
+<h3>Patricio Villar</h3>
+
+</section>
+<section class='' data-state='' id='slide-2'>
+  <h2>Introduction</h2>
+  <hr>
+
+<ul class = "build incremental">
+<li>A traffic matrix is a tool used by network architects for network management and capacity planning.</li>
+<li>Taken together with network topology, routing and fault data; the TM can provide a great deal of help in the diagnosis and management of network congestion.</li>
+<li>On longer scales, traffic matrices are critical inputs to network design, capacity planning and business planning.</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-3'>
+  <h2>What does a TM provide?</h2>
+  <hr>
+
+<h3>&quot;For every ingress point i into the network and egress point j out of the</h3>
+
+<h3>network, the volume oftraffic T(i,j) from i to j over a time interval.&quot;</h3>
+
+</section>
+<section class='' data-state='' id='slide-4'>
+  <h2>Methods to Effectively Compute TMs</h2>
+  <hr>
+
+<ul class = "build incremental">
+<li>Gravity Models</li>
+<li>Generalized Gravity Models</li>
+<li>Tomo-Gravity Models</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-5'>
+  <h2>Tomogravity explained</h2>
+  <hr>
+
+<ul class = "build incremental">
+<li>&quot;Tomo-gravity&quot; = tomography + gravity modeling</li>
+<li>Exploits topological equivalence to restrict problem size</li>
+<li>Use of least squares to get the solution:</li>
+</ul>
+
+<p><img src="tmg_expl.jpg" alt="width"></p>
+
+</section>
+<section class='' data-state='' id='slide-6'>
+  <h2>Tomogravity Model Applied</h2>
+  <hr>
+
+<ul class = "build incremental">
+<li>In gral, there are not enough constraints: O(N) vs. O(N<sup>2)</sup></li>
+<li>Constraints give a subspace of possible solutions</li>
+<li>Constraints sub-space: Y = A * x + e; where x is the estimated TM</li>
+<li>Finds a solution that satisfies the constraint AND is close to the Gravity model (Kullback-Lieber distance)</li>
+<li>Orders of residuals &quot;e&quot; around 0.1. Tested in the Internet2 Abilene network.</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-7'>
+  <h2>Where do we get Y?</h2>
+  <hr>
+
+<p><img src="vpr.jpg" alt="width"></p>
+
+<ul class = "build incremental">
+<li>VPR scheduled reports can provide link loads!!!</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-8'>
+  <h2>Data Tyding:</h2>
+  <hr>
+
+<ul class = "build incremental">
+<li>VPR data must be rolled up.</li>
+<li>In general, it provides tidy data. There are some exceptions though.</li>
+<li>good deck on tidy data on <a href="http://www.stat.ucla.edu/%7Enfultz/tidy.html">http://www.stat.ucla.edu/~nfultz/tidy.html</a> - Neal Futz (UCLA)</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-9'>
+  <h2>Create a simple model of your network:</h2>
+  <hr>
+
+<p><img src="assets/fig/unnamed-chunk-1-1.png" alt="plot of chunk unnamed-chunk-1"> </p>
+
+</section>
+<section class='' data-state='' id='slide-10'>
+  <h3>Calculate and Visualize your TM:</h3>
+  <hr>
+
+<p><img src="DCTM7elem.jpeg" alt="width">
+    <a href="https://plot.ly/5/%7Epato23arg/">https://plot.ly/5/~pato23arg/</a></p>
+
+</section>
+<section class='' data-state='' id='slide-11'>
+  <h3>Calculate and Visualize your TM (Cont&#39;ed):</h3>
+  <hr>
+
+<p><img src="wanzoom7elem.jpeg" alt="width">
+    <a href="https://plot.ly/6/%7Epato23arg/">https://plot.ly/6/~pato23arg/</a></p>
+
+</section>
+<section class='' data-state='' id='slide-12'>
+  <h3>Calculate and Visualize your TM (Cont&#39;ed):</h3>
+  <hr>
+
+<p><img src="divg.ratios.jpeg" alt="width">
+    <a href="https://plot.ly/7/%7Epato23arg/">https://plot.ly/7/~pato23arg/</a></p>
+
+</section>
+<section class='' data-state='' id='slide-13'>
+  <h3>Tshoot with Heat Maps:</h3>
+  <hr>
+
+<p><img src="hm_ucr.jpeg" alt="width"></p>
+
+</section>
+<section class='' data-state='' id='slide-14'>
+  <h3>Tshoot with Heat Maps (Cont&#39;ed):</h3>
+  <hr>
+
+<p><img src="hm_cr.jpeg" alt="width"></p>
+
+</section>
+<section class='' data-state='' id='slide-15'>
+  <h2>Further Applications:</h2>
+  <ul class = "build incremental">
+<li><p>Network Anomography: Detect anomalies using traffic matrix time and spatial series. </p></li>
+<li><p>Best paper in research.att.com (&quot;Network Anomography: Robust, General Network-Level Anomaly Inference&quot; - Zhang, Ge, Greenberg, Roughan)</p></li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-16'>
+  <h2>Biblio:</h2>
+  <ul class = "build incremental">
+<li>Information, Gravity and Traffic Matrices, NISS Internet Tomography Technology Workshop, March 28th, North Carolina, 2003. Matthew Roughan</li>
+<li>Traffic matrix estimation on a large IP backbone, A Gunnar, Mikael Johansson, and Thomas Telkamp, Internet Measurement Conference 2004.</li>
+<li>Time-Varying Network Tomography: Router Link Data, Jin Cao, Drew Davis, Scott Vander Wiel and Bin Yu, Journal of the American Statistical Association, Vol. 95, No. 452 (Dec., 2000), pp. 1063-1075.</li>
+<li>Statistical Analysis of network data. J. Kolaczyk (Jan 2014)</li>
+</ul>
+
+</section>
+<section class='' data-state='' id='slide-17'>
+  <h2>QA</h2>
+  <hr>
+
+</section>
+    </div>
+  </div>
+</body>
+  <script src="libraries/frameworks/revealjs/lib/js/head.min.js"></script>
+  <script src="libraries/frameworks/revealjs/js/reveal.min.js"></script>
+  <script>
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+    theme: Reveal.getQueryHash().theme || 'sky', 
+    transition: Reveal.getQueryHash().transition || 'fade', 
+    dependencies: [
+    // Cross-browser shim that fully implements classList -
+    // https://github.com/eligrey/classList.js/
+      { src: 'libraries/frameworks/revealjs/lib/js/classList.js', condition: function() { return !document.body.classList;}},
+      // Zoom in and out with Alt+click
+      { src: 'libraries/frameworks/revealjs/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Speaker notes
+      { src: 'libraries/frameworks/revealjs/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+      // Remote control your reveal.js presentation using a touch device
+      //{ src: 'libraries/frameworks/revealjs/plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ]
+  });
+  </script>  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+ 
+
+</html>
